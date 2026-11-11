@@ -1,5 +1,8 @@
 name: Verify NEXUS
 on: [push, pull_request]
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   java:
     runs-on: ubuntu-latest
@@ -17,6 +20,19 @@ jobs:
       - run: pip install -r ai-service/requirements.lock.txt
       - run: python -m pytest -q
         working-directory: ai-service
+      - name: Diagnose live molecular provider
+        working-directory: ai-service
+        run: |
+          python - <<'PY'
+          import truststore
+          truststore.inject_into_ssl()
+          from app.scientific import molecule
+          try:
+              model = molecule("CID:962")
+              print("Live PubChem:", model["id"], len(model["atoms"]), "atoms")
+          except Exception as exc:
+              print("Live PubChem diagnostic:", type(exc).__name__, str(exc)[:220])
+          PY
   frontend:
     runs-on: ubuntu-latest
     steps:

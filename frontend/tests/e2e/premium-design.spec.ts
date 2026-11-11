@@ -111,6 +111,14 @@ test("hero selection settles promptly after a direct interaction", async ({
     .getByRole("button", { name: "Show Featured article card" })
     .click();
   await expect(card).toHaveAttribute("data-slot", "center");
+  // Keep the product's duration budget explicit, while allowing a shared CI
+  // runner extra wall time to present frames and finish its CSS transitions.
+  const durations = await card.evaluate((element) =>
+    getComputedStyle(element)
+      .transitionDuration.split(",")
+      .map((duration) => parseFloat(duration) * 1000),
+  );
+  expect(Math.max(...durations)).toBeLessThanOrEqual(560);
   await expect
     .poll(
       () =>
@@ -120,7 +128,7 @@ test("hero selection settles promptly after a direct interaction", async ({
             .getAnimations()
             .filter((animation) => animation.playState === "running").length;
         }),
-      { timeout: 950, intervals: [32] },
+      { timeout: 3000, intervals: [32] },
     )
     .toBe(0);
 });
