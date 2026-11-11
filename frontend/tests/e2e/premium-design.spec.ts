@@ -103,6 +103,9 @@ test("hero selection settles promptly after a direct interaction", async ({
   page,
 }) => {
   await page.goto("/");
+  await page.evaluate(async () => {
+    await document.fonts.ready;
+  });
   const hero = page.getByRole("region", {
     name: "Explore the NEXUS knowledge universe",
   });
@@ -119,16 +122,31 @@ test("hero selection settles promptly after a direct interaction", async ({
       .map((duration) => parseFloat(duration) * 1000),
   );
   expect(Math.max(...durations)).toBeLessThanOrEqual(560);
+  // Chrome can retain a "running" compositor transition after the card has
+  // visually settled. Compare its rendered box with the unanimated destination.
+  const destination = await card.evaluate((element) => {
+    const target = element.cloneNode(false) as HTMLElement;
+    target.style.transition = "none";
+    target.style.animation = "none";
+    target.style.visibility = "hidden";
+    element.parentElement!.append(target);
+    const { x, y, width, height } = target.getBoundingClientRect();
+    target.remove();
+    return { x, y, width, height };
+  });
   await expect
     .poll(
       () =>
-        card.evaluate((element) => {
-          element.getBoundingClientRect();
-          return element
-            .getAnimations()
-            .filter((animation) => animation.playState === "running").length;
-        }),
+        card.evaluate((element, expected) => {
+          const actual = element.getBoundingClientRect();
+          return Math.max(
+            Math.abs(actual.x - expected.x),
+            Math.abs(actual.y - expected.y),
+            Math.abs(actual.width - expected.width),
+            Math.abs(actual.height - expected.height),
+          );
+        }, destination),
       { timeout: 3000, intervals: [32] },
     )
-    .toBe(0);
+    .toBeLessThan(1);
 });
