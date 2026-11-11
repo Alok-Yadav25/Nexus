@@ -1,0 +1,61 @@
+{
+  "measuredAt": "2026-11-09T19:33:36Z",
+  "hardware": {
+    "platform": "macOS-27.2-arm64-arm-64bit",
+    "architecture": "arm64",
+    "cpuCount": 8
+  },
+  "dataset": {
+    "entities": 8,
+    "claims": 15,
+    "sources": 6,
+    "relationships": 5,
+    "domains": [
+      {
+        "domain": "Space",
+        "count": 2
+      },
+      {
+        "domain": "Chemistry",
+        "count": 2
+      },
+      {
+        "domain": "Fiction",
+        "count": 2
+      },
+      {
+        "domain": "History",
+        "count": 1
+      },
+      {
+        "domain": "Energy",
+        "count": 1
+      }
+    ],
+    "articles": 8
+  },
+  "concurrency": 4,
+  "warmupRequests": 5,
+  "cacheState": "warm; actual Redis availability determines prefix cache",
+  "scope": "Local HTTP on a tiny starter dataset; not a production capacity claim",
+  "results": {
+    "autocomplete": {
+      "p50_ms": 7.26,
+      "p95_ms": 23.15,
+      "max_ms": 36.02,
+      "samples": 50
+    },
+    "search": {
+      "p50_ms": 48.46,
+      "p95_ms": 84.92,
+      "max_ms": 124.45,
+      "samples": 50
+    },
+    "article": {
+      "p50_ms": 12.68,
+      "p95_ms": 21.54,
+      "max_ms": 53.08,
+      "samples": 50
+    }
+  }
+}

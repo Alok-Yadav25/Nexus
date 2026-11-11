@@ -1,0 +1,142 @@
+.readerTools {
+  margin: 24px 0;
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--surface);
+}
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+.toolbar > a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+  font-size: 12px;
+  color: var(--cyan);
+}
+.textControls {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+}
+.textControls button {
+  min-width: 42px;
+  min-height: 42px;
+  display: grid;
+  place-items: center;
+}
+.textControls output {
+  font-size: 12px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.progress {
+  margin-top: 18px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  font-size: 11px;
+  color: var(--muted);
+}
+.progress > progress {
+  width: 100%;
+}
+.progress > span:last-child {
+  margin-left: auto;
+}
+.readerTools progress,
+.savedCard progress {
+  display: block;
+  appearance: none;
+  height: 4px;
+  width: 100%;
+  border: 0;
+  border-radius: 4px;
+  background: var(--line);
+  color: var(--cyan);
+  overflow: hidden;
+}
+.readerTools progress::-webkit-progress-bar,
+.savedCard progress::-webkit-progress-bar {
+  background: var(--line);
+}
+.readerTools progress::-webkit-progress-value,
+.savedCard progress::-webkit-progress-value {
+  background: var(--cyan);
+}
+.readerTools progress::-moz-progress-bar,
+.savedCard progress::-moz-progress-bar {
+  background: var(--cyan);
+}
+.message {
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--muted);
+}
+.message:empty {
+  display: none;
+}
+.message:not(:empty) {
+  margin: 12px 0;
+}
+.readerTools label {
+  margin-top: 14px;
+}
+.savedGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+.savedCard {
+  padding: 26px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  min-width: 0;
+}
+.savedCard h2 {
+  font-size: 25px;
+  margin: 22px 0;
+  overflow-wrap: anywhere;
+}
+.savedCard p {
+  margin: 14px 0;
+  font-size: 12px;
+}
+.savedActions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 22px;
+}
+@media (max-width: 1100px) {
+  .savedGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 680px) {
+  .savedGrid {
+    grid-template-columns: 1fr;
+  }
+  .readerTools {
+    padding: 16px;
+  }
+  .toolbar {
+    gap: 10px;
+  }
+  .toolbar > a {
+    margin-left: 0;
+  }
+  .progress > span:last-child {
+    margin-left: 0;
+    width: 100%;
+  }
+}

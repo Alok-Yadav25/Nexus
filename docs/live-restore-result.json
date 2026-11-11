@@ -1,0 +1,28 @@
+{
+  "article": "Lithium",
+  "priorVersion": 1,
+  "editedVersion": 2,
+  "restoredAsVersion": 3,
+  "priorContentPreserved": true,
+  "historyPreserved": true,
+  "destinations": [
+    {
+      "destination": "NEO4J",
+      "version": 3,
+      "state": "SUCCESS",
+      "error": null
+    },
+    {
+      "destination": "QDRANT",
+      "version": 3,
+      "state": "SUCCESS",
+      "error": null
+    },
+    {
+      "destination": "LEXICAL",
+      "version": 3,
+      "state": "SUCCESS",
+      "error": null
+    }
+  ]
+}

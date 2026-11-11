@@ -1,0 +1,22 @@
+{
+  "jobId": "47d9dcc8-df73-4e11-bbeb-def6e6a7ea81",
+  "topic": "Quantum computing",
+  "state": "REVIEW_REQUIRED",
+  "sourceCount": 3,
+  "claimCount": 3,
+  "stages": [
+    "QUEUED",
+    "CLASSIFYING",
+    "PLANNING",
+    "RESEARCHING",
+    "SOURCE_EVALUATION",
+    "CLAIM_EXTRACTION",
+    "VERIFICATION",
+    "ARTICLE_GENERATION",
+    "CITATION_AUDIT",
+    "GRAPH_EXTRACTION",
+    "MEDIA_PROCESSING",
+    "REVIEW_REQUIRED"
+  ],
+  "published": false
+}

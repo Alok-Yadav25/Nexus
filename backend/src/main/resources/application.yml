@@ -1,0 +1,62 @@
+spring:
+  application:
+    name: nexus
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/nexus}
+    username: ${POSTGRES_USER:nexus}
+    password: ${POSTGRES_PASSWORD:nexus-local}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+  data:
+    redis:
+      repositories:
+        enabled: false
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      timeout: 300ms
+  task:
+    scheduling:
+      pool:
+        size: 4
+  session:
+    timeout: 12h
+server:
+  address: ${SERVER_ADDRESS:127.0.0.1}
+  port: 8080
+  servlet:
+    session:
+      timeout: 12h
+      cookie:
+        path: /
+        http-only: true
+        same-site: lax
+        secure: ${COOKIE_SECURE:true}
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: when_authorized
+nexus:
+  ai-url: ${AI_SERVICE_URL:http://localhost:8000}
+  service-token: ${AI_SERVICE_TOKEN:local-development-only}
+  rate-limit-secret: ${RATE_LIMIT_SECRET:${AI_SERVICE_TOKEN:local-development-only}}
+  neo4j-uri: ${NEO4J_URI:bolt://localhost:7687}
+  neo4j-password: ${NEO4J_PASSWORD:nexus-local-password}
+  qdrant-url: ${QDRANT_URL:http://localhost:6333}
+  rrf-k: ${SEARCH_RRF_K:60}
+  vector-min-score: ${VECTOR_MIN_SCORE:0.55}
+  frontend-origin: ${FRONTEND_ORIGIN:http://localhost:3000,http://127.0.0.1:3000}
+  bootstrap-email: ${BOOTSTRAP_ADMIN_EMAIL:}
+  bootstrap-password: ${BOOTSTRAP_ADMIN_PASSWORD:}
+
+logging:
+  level:
+    root: INFO
+    org.springframework: WARN
+    org.springframework.jdbc: WARN
+    org.springframework.web: WARN

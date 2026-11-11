@@ -1,0 +1,139 @@
+.content {
+  --motion-paper: var(--surface);
+  --motion-line: var(--line);
+  --motion-shadow: #00000024;
+  --motion-soft: var(--accent-wash);
+  --motion-glow: color-mix(in srgb, var(--accent) 6%, transparent);
+  --motion-accent: var(--cyan);
+  --motion-ink: var(--text);
+  --motion-on-accent: var(--on-accent);
+  --motion-secondary: var(--muted);
+}
+.content [data-motion-card] {
+  position: relative;
+  isolation: isolate;
+  transition:
+    transform 0.16s cubic-bezier(0.2, 0.8, 0.2, 1),
+    box-shadow 0.2s,
+    border-color 0.2s;
+}
+.content [data-motion-card]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(
+    ellipse at var(--pointer-x, 50%) var(--pointer-y, 0%),
+    var(--motion-glow),
+    transparent 70%
+  );
+  transition: opacity 0.2s;
+}
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .content [data-motion-card]:hover {
+    transform: perspective(1000px) translateY(-4px) rotateX(var(--tilt-x, 0deg))
+      rotateY(var(--tilt-y, 0deg));
+    border-color: var(--motion-accent);
+    box-shadow: 0 18px 35px -16px var(--motion-shadow);
+  }
+  .content [data-motion-card]:hover::after {
+    opacity: 1;
+  }
+  .content [data-motion-card] :global(.card-top > svg),
+  .content [data-motion-card] > svg {
+    transition:
+      transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1),
+      color 0.3s;
+  }
+  .content [data-motion-card]:hover :global(.card-top > svg),
+  .content [data-motion-card]:hover > svg {
+    transform: translate(2px, -2px);
+    color: var(--motion-accent);
+  }
+}
+.content [data-motion-card]:focus-visible {
+  outline: 2px solid var(--motion-accent);
+  outline-offset: 4px;
+}
+.content :global(.landing-content .domain-section) {
+  margin-top: 67px;
+}
+.content :global(.landing-content .discovery-banner) {
+  padding: 26px 35px 26px 15px;
+  gap: 30px;
+  border-color: var(--motion-line);
+  border-radius: 22px;
+  background:
+    radial-gradient(ellipse at 20% 40%, var(--motion-soft), transparent 70%),
+    var(--surface);
+}
+.content :global(.landing-content .discovery-banner > div:nth-child(2)) {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+}
+.content :global(.landing-content .how-section) {
+  margin-top: 66px;
+}
+.content :global(.landing-content .how-grid) {
+  gap: 18px;
+}
+.content :global(.landing-content .how-grid > div) {
+  padding: 0 24px 27px;
+  border: 1px solid var(--motion-line);
+  border-radius: 20px;
+  background: var(--surface);
+}
+.content :global(.landing-content .how-grid h3) {
+  font-size: 23px;
+  font-weight: 500;
+}
+.content :global(.landing-content .how-grid p) {
+  max-width: 100%;
+}
+@media (max-width: 900px) {
+  .content :global(.landing-content .discovery-banner) {
+    padding: 24px;
+    gap: 22px;
+  }
+}
+@media (max-width: 680px) {
+  .content :global(.landing-content .domain-section) {
+    margin-top: 48px;
+  }
+  .content :global(.landing-content .discovery-banner) {
+    padding: 8px 24px 27px;
+    gap: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .content :global(.landing-content .how-section) {
+    margin-top: 48px;
+  }
+  .content :global(.landing-content .how-grid) {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  .content :global(.landing-content .how-grid > div) {
+    padding-bottom: 24px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .content [data-motion-card]:hover {
+    transform: none;
+  }
+}
+
+.content :global(.landing-content .discovery-banner .button.primary) {
+  background: var(--accent);
+  color: var(--on-accent);
+  box-shadow: 0 5px 18px var(--motion-soft);
+}
+.content :global(.landing-content .discovery-banner .button.primary:hover) {
+  background: var(--accent);
+  color: var(--on-accent);
+  filter: brightness(0.95);
+}

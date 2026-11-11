@@ -1,0 +1,534 @@
+.domainFan {
+  border: 1px solid var(--motion-line);
+  border-radius: 24px;
+  background:
+    radial-gradient(ellipse at 50% 38%, var(--motion-soft), transparent 65%),
+    var(--surface);
+  padding: 18px 20px 28px;
+  color: var(--motion-ink);
+  overflow: hidden;
+}
+.fanStage {
+  position: relative;
+  height: 266px;
+  max-width: 920px;
+  margin: auto;
+}
+.fanAura {
+  position: absolute;
+  top: 22px;
+  left: calc(50% - 120px);
+  width: 240px;
+  height: 240px;
+  border: 1px solid var(--motion-line);
+  border-radius: 50%;
+  opacity: 0.5;
+}
+.fanAura::before,
+.fanAura::after {
+  content: "";
+  position: absolute;
+  inset: 30px;
+  border-radius: 50%;
+  border: 1px solid var(--motion-line);
+}
+.fanAura::after {
+  inset: 60px;
+}
+.fanCard {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+  position: absolute;
+  top: 29px;
+  left: calc(50% - 64px);
+  width: 128px;
+  height: 144px;
+  border-radius: 22px;
+  border: 1px solid var(--motion-line);
+  background: var(--motion-paper);
+  box-shadow:
+    0 9px 18px -7px var(--motion-shadow),
+    inset 0 1px #ffffff0a;
+  transform: translate(var(--fan-x), var(--fan-y)) rotate(var(--fan-angle))
+    scale(var(--fan-scale));
+  transition:
+    transform 0.42s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.2s,
+    border-color 0.2s;
+  color: var(--motion-secondary);
+  font-size: 11px;
+}
+.fanCard > svg {
+  position: absolute;
+  top: 13px;
+  right: 13px;
+  width: 10px;
+  opacity: 0.45;
+}
+.fanIcon {
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 18px;
+  background: var(--motion-soft);
+  color: var(--motion-accent);
+  transition:
+    color 0.2s,
+    background 0.2s,
+    box-shadow 0.2s;
+}
+.fanCard[data-active="true"] {
+  border-color: color-mix(in srgb, var(--motion-accent), transparent 55%);
+  color: var(--motion-ink);
+  box-shadow: 0 20px 35px -14px var(--motion-shadow);
+}
+.fanCard[data-active="true"] .fanIcon {
+  background: var(--accent);
+  color: var(--on-accent);
+  box-shadow:
+    0 8px 19px var(--accent-wash),
+    inset 0 1px 2px #ffffff60;
+}
+.fanCard:hover {
+  color: var(--motion-ink);
+  border-color: var(--motion-accent);
+  transform: translate(var(--fan-x), calc(var(--fan-y) - 8px))
+    rotate(var(--fan-angle)) scale(var(--fan-scale));
+}
+.fanCard:focus-visible {
+  outline-color: var(--motion-accent);
+}
+.fanFoot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  position: relative;
+}
+.fanFoot > button {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid var(--motion-line);
+  color: var(--motion-secondary);
+  display: grid;
+  place-items: center;
+  background: var(--motion-paper);
+}
+.fanFoot > button:hover {
+  color: var(--motion-accent);
+  border-color: var(--motion-accent);
+}
+.fanDetail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  min-width: 270px;
+  gap: 5px;
+}
+.fanDetail strong {
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: -0.04em;
+}
+.fanDetail span {
+  font-size: 10px;
+  color: var(--motion-secondary);
+}
+.discoveryDiagram {
+  width: 45%;
+  max-width: 450px;
+  flex-shrink: 0;
+}
+.discoveryDiagram > svg {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+.diagramOrbit {
+  fill: none;
+  stroke: var(--motion-line);
+  stroke-width: 0.65;
+  opacity: 0.5;
+}
+.connector {
+  fill: none;
+  stroke: var(--motion-accent);
+  stroke-width: 0.8;
+  opacity: 0.45;
+}
+.nodeTile {
+  fill: var(--motion-paper);
+  stroke: var(--motion-line);
+  stroke-width: 0.8;
+  filter: drop-shadow(0 6px 5px var(--motion-shadow));
+}
+.hub {
+  fill: var(--accent);
+  stroke: var(--line-strong);
+  stroke-width: 0.75;
+  filter: drop-shadow(0 7px 10px var(--motion-shadow));
+}
+.hubIcon {
+  color: var(--on-accent);
+}
+.nodeIcon {
+  color: var(--motion-accent);
+}
+.nodeLabel {
+  fill: var(--motion-secondary);
+  font-size: 8px;
+  font-family: "Geist Variable", sans-serif;
+}
+.discoveryDiagram[data-in-view="true"] .connector {
+  animation: drawConnection 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.discoveryDiagram[data-in-view="true"] .floatingNode {
+  animation: floatNode 4.6s ease-in-out both;
+  animation-delay: var(--float-delay, 0s);
+}
+.preview {
+  position: relative;
+  height: 180px;
+  margin: 0 -24px 23px;
+  overflow: hidden;
+  border-bottom: 1px solid var(--motion-line);
+  background: radial-gradient(
+    ellipse at 50% 65%,
+    var(--motion-soft),
+    transparent 75%
+  );
+  color: var(--motion-accent);
+}
+.previewGrid {
+  position: absolute;
+  inset: 0;
+  opacity: 0.28;
+  background-image:
+    linear-gradient(var(--motion-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--motion-line) 1px, transparent 1px);
+  background-size: 26px 26px;
+  mask-image: radial-gradient(ellipse, #000, transparent 73%);
+}
+.searchStack {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  perspective: 900px;
+}
+.searchSlip {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 210px;
+  max-width: 85%;
+  height: 47px;
+  padding: 0 13px;
+  background: var(--motion-paper);
+  border: 1px solid var(--motion-line);
+  border-radius: 12px;
+  box-shadow: 0 8px 16px -6px var(--motion-shadow);
+  transform: translateY(calc((var(--slip, 0) - 1) * 36px))
+    translateX(calc((var(--slip, 0) - 1) * -8px))
+    rotate(calc((var(--slip, 0) - 1) * -3deg));
+  font-size: 9px;
+}
+.searchSlip span {
+  flex: 1;
+  color: var(--motion-ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.searchSlip:first-child {
+  z-index: 3;
+}
+.searchSlip:nth-child(2) {
+  z-index: 2;
+}
+.searchSlip:nth-child(3) {
+  z-index: 1;
+}
+.preview[data-in-view="true"] .searchSlip {
+  animation: settleSlip 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: calc(var(--slip, 0) * 0.04s);
+}
+.paper {
+  position: absolute;
+  width: 92px;
+  height: 111px;
+  left: calc(50% - 86px);
+  top: 26px;
+  border-radius: 12px;
+  border: 1px solid var(--motion-line);
+  background: var(--motion-paper);
+  padding: 19px 13px;
+  transform: rotate(-12deg);
+  box-shadow: 0 8px 17px -9px var(--motion-shadow);
+}
+.paper:nth-of-type(3) {
+  left: calc(50% + 1px);
+  top: 31px;
+  transform: rotate(12deg);
+}
+.paper span {
+  display: block;
+  width: 100%;
+  height: 3px;
+  border-radius: 3px;
+  background: var(--motion-line);
+  margin: 9px 0;
+}
+.paper span:first-child {
+  width: 20px;
+  height: 22px;
+  border-radius: 5px;
+  margin: 0 0 10px;
+  background: var(--motion-soft);
+}
+.paper span:last-child {
+  width: 60%;
+}
+.evidenceSeal {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  left: calc(50% - 28px);
+  top: 65px;
+  width: 56px;
+  height: 56px;
+  border-radius: 17px;
+  background: var(--accent);
+  box-shadow:
+    0 10px 17px var(--accent-wash),
+    inset 0 1px 3px #ffffff72;
+  color: var(--on-accent);
+}
+.evidenceCaption {
+  position: absolute;
+  bottom: 15px;
+  width: 100%;
+  text-align: center;
+  font-size: 6px;
+  letter-spacing: 0.12em;
+  color: var(--motion-secondary);
+}
+.preview[data-in-view="true"] .evidenceSeal {
+  animation: floatNode 4.6s ease-in-out both;
+}
+.flowLines {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.flowLines path {
+  fill: none;
+  stroke: var(--motion-accent);
+  stroke-width: 0.6;
+  opacity: 0.45;
+}
+.preview[data-in-view="true"] .flowLines path {
+  animation: drawConnection 0.8s ease-out both;
+}
+.flowTile {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  width: 49px;
+  height: 49px;
+  border: 1px solid var(--motion-line);
+  border-radius: 15px;
+  background: var(--motion-paper);
+  box-shadow: 0 6px 16px -6px var(--motion-shadow);
+}
+.sourceTile {
+  left: calc(20% - 24px);
+  top: 67px;
+}
+.draftTile {
+  left: calc(50% - 27px);
+  top: 37px;
+  width: 54px;
+  height: 54px;
+  background: var(--accent);
+  color: var(--on-accent);
+}
+.reviewTile {
+  right: calc(18% - 24px);
+  top: 89px;
+}
+.flowCaption {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  position: absolute;
+  bottom: 15px;
+  width: 100%;
+  font-size: 6px;
+  letter-spacing: 0.08em;
+  color: var(--motion-secondary);
+}
+.preview[data-in-view="true"] .flowTile {
+  animation: floatNode 4.6s ease-in-out both;
+}
+.preview[data-in-view="true"] .sourceTile {
+  animation-delay: -0.6s;
+}
+.preview[data-in-view="true"] .reviewTile {
+  animation-delay: -1.2s;
+}
+@keyframes floatNode {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-7px);
+  }
+}
+@keyframes drawConnection {
+  from {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes settleSlip {
+  from {
+    opacity: 0;
+    translate: 0 12px;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+@media (max-width: 900px) {
+  .fanCard {
+    width: 112px;
+    height: 128px;
+    left: calc(50% - 56px);
+    transform: translate(calc(var(--fan-x) * 0.82), var(--fan-y))
+      rotate(var(--fan-angle)) scale(var(--fan-scale));
+  }
+  .fanCard:hover {
+    transform: translate(calc(var(--fan-x) * 0.82), calc(var(--fan-y) - 6px))
+      rotate(var(--fan-angle)) scale(var(--fan-scale));
+  }
+  .discoveryDiagram {
+    width: 43%;
+  }
+}
+@media (max-width: 680px) {
+  .domainFan {
+    border-radius: 20px;
+    padding: 12px 12px 25px;
+  }
+  .fanStage {
+    height: 232px;
+  }
+  .fanAura {
+    width: 210px;
+    height: 210px;
+    left: calc(50% - 105px);
+    top: 10px;
+  }
+  .fanCard {
+    top: 25px;
+    width: 101px;
+    height: 119px;
+    left: calc(50% - 50.5px);
+    border-radius: 18px;
+    gap: 10px;
+    font-size: 9px;
+    transform: translate(calc(var(--fan-x) * 0.53), calc(var(--fan-y) * 0.75))
+      rotate(var(--fan-angle)) scale(var(--fan-scale));
+  }
+  .fanCard:hover {
+    transform: translate(
+        calc(var(--fan-x) * 0.53),
+        calc(var(--fan-y) * 0.75 - 5px)
+      )
+      rotate(var(--fan-angle)) scale(var(--fan-scale));
+  }
+  .fanIcon {
+    width: 52px;
+    height: 52px;
+    border-radius: 15px;
+  }
+  .fanIcon svg {
+    width: 29px;
+  }
+  .fanFoot {
+    gap: 10px;
+  }
+  .fanDetail {
+    min-width: 0;
+    flex: 1;
+    max-width: 250px;
+  }
+  .fanDetail strong {
+    font-size: 16px;
+  }
+  .fanDetail span {
+    font-size: 8px;
+    max-width: 180px;
+  }
+  .fanFoot > button {
+    width: 29px;
+    height: 29px;
+    flex-shrink: 0;
+  }
+  .discoveryDiagram {
+    width: 100%;
+    max-width: 420px;
+    align-self: center;
+  }
+  .preview {
+    height: 175px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .domainFan *,
+  .discoveryDiagram *,
+  .preview * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+.fanCard:hover {
+  transition-duration: 180ms;
+}
+.fanFoot > button {
+  min-width: 44px;
+  min-height: 44px;
+}
+.fanDetail strong {
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 550;
+}
+.fanDetail span {
+  font-size: 12px;
+}
+@media (max-width: 680px) {
+  .fanDetail strong {
+    font-size: 20px;
+  }
+  .fanDetail span {
+    font-size: 10px;
+  }
+}

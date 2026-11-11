@@ -1,0 +1,28 @@
+# Apply with -f docker-compose.yml -f docker-compose.production.yml behind a TLS proxy.
+services:
+  postgres:
+    restart: unless-stopped
+    mem_limit: 512m
+  redis:
+    restart: unless-stopped
+    mem_limit: 128m
+  neo4j:
+    restart: unless-stopped
+    mem_limit: 1g
+  qdrant:
+    restart: unless-stopped
+    mem_limit: 768m
+  ai:
+    restart: unless-stopped
+    mem_limit: 1536m
+  backend:
+    restart: unless-stopped
+    mem_limit: 1g
+    environment:
+      COOKIE_SECURE: 'true'
+      JAVA_TOOL_OPTIONS: -XX:MaxRAMPercentage=70
+  frontend:
+    restart: unless-stopped
+    mem_limit: 512m
+    environment:
+      HTTPS_DEPLOYMENT: 'true'

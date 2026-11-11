@@ -1,0 +1,166 @@
+.layout {
+  display: grid;
+  grid-template-columns: 310px minmax(0, 1fr);
+  gap: 24px;
+}
+.planner,
+.learning {
+  border: 1px solid var(--line);
+  background: var(--surface);
+  border-radius: 18px;
+  padding: 26px;
+}
+.planner > svg {
+  color: var(--violet);
+  margin-bottom: 16px;
+}
+.planner h2 {
+  font-size: 24px;
+}
+.planner p {
+  font-size: 12px;
+  margin: 14px 0 22px;
+}
+.planner form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.planner label {
+  font-size: 12px;
+  gap: 7px;
+}
+.journeyHeading h2 {
+  margin: 12px 0 22px;
+  font-size: 25px;
+}
+.steps {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 0;
+  margin: 0 0 25px;
+}
+.steps button {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 11px;
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: 30px;
+  min-height: 44px;
+}
+.steps button[aria-current="step"] {
+  border-color: var(--violet);
+  color: var(--violet);
+}
+.steps button > span {
+  display: grid;
+  place-items: center;
+  min-width: 17px;
+}
+.concept h2 {
+  font-size: 32px;
+  margin: 12px 0;
+}
+.concept > p {
+  margin: 15px 0;
+  font-size: 13px;
+}
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 24px 0;
+}
+.connection {
+  display: flex;
+  align-items: flex-start;
+  gap: 13px;
+  padding: 22px 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  margin: 23px 0;
+}
+.connection > svg {
+  color: var(--teal);
+}
+.connection h3 {
+  font-size: 16px;
+  margin-bottom: 12px;
+}
+.connection p {
+  font-size: 12px;
+  margin: 12px 0;
+}
+.connection a {
+  color: var(--cyan);
+  font-size: 12px;
+}
+.navigation {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: space-between;
+  margin-top: 28px;
+}
+.saved {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  gap: 14px;
+}
+.saved > button {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 23px 40px 23px 23px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  text-align: left;
+}
+.saved strong {
+  font-size: 16px;
+  font-weight: 500;
+}
+.saved span {
+  font-size: 11px;
+  color: var(--muted);
+}
+.saved svg {
+  position: absolute;
+  right: 18px;
+  top: 26px;
+}
+@media (max-width: 1000px) {
+  .layout {
+    grid-template-columns: 260px minmax(0, 1fr);
+    gap: 16px;
+  }
+  .planner,
+  .learning {
+    padding: 20px;
+  }
+}
+@media (max-width: 760px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+  .planner select,
+  .planner button {
+    min-height: 44px;
+  }
+  .concept h2 {
+    font-size: 27px;
+  }
+  .actions {
+    flex-direction: column;
+  }
+  .saved {
+    grid-template-columns: 1fr;
+  }
+}
