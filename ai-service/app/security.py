@@ -55,7 +55,11 @@ def validate_url(url):
     if host not in APPROVED_HOSTS:
         raise ValueError("Source host is not approved")
     ips = sorted(
-        {x[4][0] for x in socket.getaddrinfo(host, 443, type=socket.SOCK_STREAM)}
+        {x[4][0] for x in socket.getaddrinfo(host, 443, type=socket.SOCK_STREAM)},
+        key=lambda value: (
+            ipaddress.ip_address(value).version,
+            int(ipaddress.ip_address(value)),
+        ),
     )
     if not ips or any(not ipaddress.ip_address(ip).is_global for ip in ips):
         raise ValueError("Private or reserved source address")
@@ -63,15 +67,39 @@ def validate_url(url):
 
 
 class PinnedHTTPSConnection(http.client.HTTPSConnection):
-    def __init__(self, host, address):
+    def __init__(self, host, addresses):
         super().__init__(
             host, timeout=12, context=truststore.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
         )
-        self.address = address
+        self.addresses = tuple(addresses)
 
     def connect(self):
-        raw = socket.create_connection((self.address, 443), timeout=self.timeout)
-        self.sock = self._context.wrap_socket(raw, server_hostname=self.host)
+        # Only use the already-validated DNS answer. A single unreachable IPv6
+        # route must not hide reachable IPv4 records (or vice versa).
+        deadline = time.monotonic() + self.timeout
+        last_error = None
+        for address in self.addresses:
+            remaining = deadline - time.monotonic()
+            if remaining <= 0:
+                break
+            raw = None
+            try:
+                raw = socket.create_connection(
+                    (address, 443), timeout=min(4, remaining)
+                )
+                raw.settimeout(max(0.001, deadline - time.monotonic()))
+                self.sock = self._context.wrap_socket(raw, server_hostname=self.host)
+                self.sock.settimeout(self.timeout)
+                return
+            except ssl.SSLCertVerificationError:
+                if raw is not None:
+                    raw.close()
+                raise
+            except OSError as exc:
+                if raw is not None:
+                    raw.close()
+                last_error = exc
+        raise last_error or TimeoutError("No validated source address was reachable")
 
 
 class SourceHTTPError(ValueError):
@@ -107,7 +135,7 @@ class SafeFetcher:
         if redirects > 3:
             raise ValueError("Too many redirects")
         host, path, ips = validate_url(url)
-        conn = PinnedHTTPSConnection(host, ips[0])
+        conn = PinnedHTTPSConnection(host, ips)
         try:
             conn.request(
                 "GET",

@@ -76,3 +76,9 @@ README screenshots were visually checked, local credentials were scanned out of 
 ### First GitHub Actions run
 
 Commit `6192928` passed the Java, Python and frontend jobs on Linux. The full Docker Compose stack built and reached healthy status. Browser tests did **not** execute in that run: `playwright install --with-deps` failed because the runner could not resolve Ubuntu package mirrors while installing optional system fonts. CI now selects the runner's preinstalled Google Chrome through the same `PLAYWRIGHT_CHROME_PATH` mechanism used locally, avoiding that redundant package-install step. The browser scenarios and assertions remain enabled.
+
+### Linux provider transport regression
+
+The next container run executed all browser scenarios: **80 passed, 8 failed**. Six failures came from unavailable molecular data; a direct Linux provider diagnostic exposed `OSError: [Errno 101] Network is unreachable`. The fetcher selected only the first text-sorted DNS address, allowing an unreachable IPv6 route to mask valid IPv4 records. It now prefers IPv4, tries only previously validated addresses within one connection deadline, retains hostname verification, and immediately rejects certificate verification failures. Five new regressions cover ordering, mixed private DNS answers, fallback, complete failure, certificate rejection and the shared deadline. **57 Python tests pass**, and a fresh real PubChem fetch returned CID 962 with three atoms and two bonds.
+
+The two hero checks exceeded a 950 ms wall-clock assertion on the shared runner. They now separately enforce the unchanged **560 ms maximum configured transition duration** and allow up to three seconds for the runner to present frames and report completion. Both focused local desktop/mobile checks pass. No hero styling or animation duration was extended.
