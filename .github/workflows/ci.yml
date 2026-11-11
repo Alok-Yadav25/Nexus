@@ -51,7 +51,13 @@ jobs:
       - uses: actions/setup-node@v4
         with: {node-version: '22', cache: npm, cache-dependency-path: frontend/package-lock.json}
       - run: python3 infrastructure/scripts/init_env.py
-      - run: docker compose config --quiet && docker compose up -d --build --wait --wait-timeout 600
+      - name: Validate deployment configurations
+        run: |
+          docker compose config --quiet
+          docker compose -f docker-compose.yml -f docker-compose.production.yml config --quiet
+          NEXUS_HOSTNAME=nexus.example.com docker compose -f docker-compose.yml -f docker-compose.production.yml -f docker-compose.oracle.yml config --quiet
+          docker run --rm -e NEXUS_HOSTNAME=nexus.example.com -v "$PWD/infrastructure/caddy/Caddyfile:/etc/caddy/Caddyfile:ro" caddy:2-alpine caddy validate --config /etc/caddy/Caddyfile
+      - run: docker compose up -d --build --wait --wait-timeout 600
       - name: Run browser tests with preinstalled Chrome
         run: |
           npm ci

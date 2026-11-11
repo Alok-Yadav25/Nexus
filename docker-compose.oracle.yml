@@ -1,0 +1,47 @@
+# Use after docker-compose.yml and docker-compose.production.yml.
+# NEXUS_HOSTNAME must resolve publicly to this VM for automatic HTTPS.
+x-logging: &bounded-logging
+  driver: json-file
+  options:
+    max-size: 10m
+    max-file: '3'
+services:
+  postgres:
+    logging: *bounded-logging
+  redis:
+    logging: *bounded-logging
+  neo4j:
+    environment:
+      NEO4J_server_memory_pagecache_size: 256m
+    logging: *bounded-logging
+  qdrant:
+    logging: *bounded-logging
+  ai:
+    logging: *bounded-logging
+  backend:
+    environment:
+      FRONTEND_ORIGIN: https://${NEXUS_HOSTNAME:?Set the public DNS hostname}
+      SPRINGDOC_API_DOCS_ENABLED: 'false'
+      SPRINGDOC_SWAGGER_UI_ENABLED: 'false'
+    logging: *bounded-logging
+  frontend:
+    environment:
+      SITE_URL: https://${NEXUS_HOSTNAME:?Set the public DNS hostname}
+    logging: *bounded-logging
+  proxy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    mem_limit: 128m
+    environment:
+      NEXUS_HOSTNAME: ${NEXUS_HOSTNAME:?Set the public DNS hostname}
+    depends_on:
+      frontend: {condition: service_healthy}
+    ports: ['80:80', '443:443']
+    volumes:
+      - ./infrastructure/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    logging: *bounded-logging
+volumes:
+  caddy_data:
+  caddy_config:

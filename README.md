@@ -144,7 +144,7 @@ The first semantic indexing pass downloads the open BGE-small English model. Ind
 | Research service health | http://localhost:8000/health |
 | Neo4j browser | http://localhost:7474 |
 
-Published service ports bind to loopback. See [deployment and backups](docs/DEPLOYMENT.md) for persistent storage, private services and TLS setup before hosting publicly.
+Published service ports bind to loopback. See [deployment and backups](docs/DEPLOYMENT.md) for persistent storage, private services and TLS setup before hosting publicly. The [Oracle Always Free guide](docs/ORACLE_DEPLOYMENT.md) covers the prepared ARM deployment and HTTPS override; provisioning still requires an Oracle account and available free capacity.
 
 ### Optional Groq configuration
 
